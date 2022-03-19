@@ -6,12 +6,15 @@ import Logo from "../assets/logo.png";
 import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerRoute } from "../utils/ApiRoutes";
+import { strongPassword } from "../utils/strongPassword";
 
 function Register() {
 
-  const toastOptions = {
+  const navigate = useNavigate();
+
+  const toastErrorOptions = {
     position: "top-left",
     autoClose: 5000,
     hideProgressBar: false,
@@ -21,6 +24,8 @@ function Register() {
     theme: "dark",
     progress: undefined,
   };
+
+  const toastSuccessOptions = {...toastErrorOptions, autoClose: 2000};
 
   const [values, setValues] = useState({
     username: "",
@@ -34,21 +39,30 @@ function Register() {
     if(handleValidation()) {
       const { password, email, username } = values;
       axios.post(registerRoute, {username: username, email: email, password: password})
-        .then(res => console.log(res.data))
-        .catch(res => console.log(res));
+        .then(response => { 
+          toast.success(response.data.message, toastSuccessOptions);
+          setTimeout(() => {
+            navigate("/")
+          }, 3000);
+        } )
+        .catch(error => {
+          console.log(error.response);
+          const toastMessageError = error.response.data.error.message;
+          toast.error(toastMessageError, toastErrorOptions);
+        });
     }
   };
 
   const handleValidation = () => {
     const { password, confirmPassword, username } = values;
     if (password !== confirmPassword) {
-      toast.error("password and confirm password should be same.", toastOptions);
+      toast.error("password and confirm password should be same.", toastErrorOptions);
       return false;
     } else if(username.length < 3) {
-      toast.error("username length should be greater than 3 characters.", toastOptions);
+      toast.error("username length should be greater than 3 characters.", toastErrorOptions);
       return false;
-    } else if(password.length < 8) {
-      toast.error("password length should be equal or greater than 3 characters.", toastOptions);
+    } else if(!strongPassword.test(password)) {
+      toast.error("password must contain at least 1 lowercase alphabetical character,  1 uppercase alphabetical character, 1 numeric character, one special character, must be eight characters or longer.", toastErrorOptions);
       return false;
     }
     return true;
