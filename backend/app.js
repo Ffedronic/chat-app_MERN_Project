@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
@@ -19,3 +20,6 @@ mongoose.connect(process.env.MONGO_URL, {
 .then(() => console.log("DB connection successfull"))
 .catch((error) => console.log(error.message));
 
+app.use("/api/auth", userRouter) ;
+
+module.exports = app ;
