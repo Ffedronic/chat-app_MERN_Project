@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
@@ -11,6 +11,8 @@ import { registerRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
 
 function Register() {
+  
+  const hasToken = localStorage.getItem("chat-app-userToken");
 
   const navigate = useNavigate();
 
@@ -25,7 +27,13 @@ function Register() {
     progress: undefined,
   };
 
-  const toastSuccessOptions = {...toastErrorOptions, autoClose: 2000};
+  useEffect(() => {
+    if (hasToken) {
+      navigate("/chat");
+    }
+  }, [hasToken, navigate]);
+
+  const toastSuccessOptions = { ...toastErrorOptions, autoClose: 2000 };
 
   const [values, setValues] = useState({
     username: "",
@@ -36,16 +44,21 @@ function Register() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(handleValidation()) {
+    if (handleValidation()) {
       const { password, email, username } = values;
-      axios.post(registerRoute, {username: username, email: email, password: password})
-        .then(response => { 
+      axios
+        .post(registerRoute, {
+          username: username,
+          email: email,
+          password: password,
+        })
+        .then((response) => {
           toast.success(response.data.message, toastSuccessOptions);
           setTimeout(() => {
-            navigate("/")
+            navigate("/");
           }, 3000);
-        } )
-        .catch(error => {
+        })
+        .catch((error) => {
           console.log(error.response);
           const toastMessageError = error.response.data.error.message;
           toast.error(toastMessageError, toastErrorOptions);
@@ -56,13 +69,22 @@ function Register() {
   const handleValidation = () => {
     const { password, confirmPassword, username } = values;
     if (password !== confirmPassword) {
-      toast.error("password and confirm password should be same.", toastErrorOptions);
+      toast.error(
+        "password and confirm password should be same.",
+        toastErrorOptions
+      );
       return false;
-    } else if(username.length < 3) {
-      toast.error("username length should be greater than 3 characters.", toastErrorOptions);
+    } else if (username.length < 3) {
+      toast.error(
+        "username length should be greater than 3 characters.",
+        toastErrorOptions
+      );
       return false;
-    } else if(!strongPassword.test(password)) {
-      toast.error("password must contain at least 1 lowercase alphabetical character,  1 uppercase alphabetical character, 1 numeric character, one special character, must be eight characters or longer.", toastErrorOptions);
+    } else if (!strongPassword.test(password)) {
+      toast.error(
+        "password must contain at least 1 lowercase alphabetical character,  1 uppercase alphabetical character, 1 numeric character, one special character, must be eight characters or longer.",
+        toastErrorOptions
+      );
       return false;
     }
     return true;
@@ -70,6 +92,7 @@ function Register() {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+
   return (
     <div>
       <Container className="d-flex flex-column align-items-center">

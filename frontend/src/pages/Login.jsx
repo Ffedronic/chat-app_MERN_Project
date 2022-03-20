@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
@@ -9,8 +9,14 @@ import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
+import { useDispatch } from "react-redux";
+import { SetConnection } from "../utils/store";
 
 function Login() {
+
+  const hasToken = localStorage.getItem("chat-app-userToken");
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -25,8 +31,15 @@ function Login() {
     progress: undefined,
   };
 
-  const toastSuccessOptions = {...toastErrorOptions, autoClose: 2000};
+  const toastSuccessOptions = { ...toastErrorOptions, autoClose: 2000 };
 
+  useEffect(() => {
+    if(hasToken) {
+      navigate("/chat")
+    }
+  }, [hasToken, navigate])
+  
+  
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -34,19 +47,21 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(handleValidation()) {
+    if (handleValidation()) {
       const { password, email } = values;
-      axios.post(loginRoute, { email: email, password: password })
-        .then(response => { 
-          console.log(response);
-          localStorage.setItem("chat-app-tokenUser", response.data.token);
-          localStorage.setItem("chat-app-username", response.data.username);
-          toast.success(`${response.data.message}, ${response.data.username}`, toastSuccessOptions);
+      axios
+        .post(loginRoute, { email: email, password: password })
+        .then((response) => {
+          dispatch(SetConnection(response.data));
+          toast.success(
+            `${response.data.message}, ${response.data.username}`,
+            toastSuccessOptions
+          );
           setTimeout(() => {
-            navigate("/chat")
+            navigate("/chat");
           }, 3000);
-        } )
-        .catch(error => {
+        })
+        .catch((error) => {
           console.log(error.response);
         });
     }
@@ -54,8 +69,11 @@ function Login() {
 
   const handleValidation = () => {
     const { password } = values;
-    if(!strongPassword.test(password)) {
-      toast.error("password must contain at least 1 lowercase alphabetical character,  1 uppercase alphabetical character, 1 numeric character, one special character, must be eight characters or longer.", toastErrorOptions);
+    if (!strongPassword.test(password)) {
+      toast.error(
+        "password must contain at least 1 lowercase alphabetical character,  1 uppercase alphabetical character, 1 numeric character, one special character, must be eight characters or longer.",
+        toastErrorOptions
+      );
       return false;
     }
     return true;
@@ -63,6 +81,7 @@ function Login() {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+
   return (
     <div>
       <Container className="d-flex flex-column align-items-center">
@@ -111,6 +130,5 @@ function Login() {
       <ToastContainer />
     </div>
   );
-}
-
+  }
 export default Login;
