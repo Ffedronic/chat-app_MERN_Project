@@ -9,23 +9,14 @@ import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
+import { toastErrorOptions } from "../utils/toastOptions"
+
 
 function Register() {
   
   const hasToken = localStorage.getItem("chat-app-userToken");
 
   const navigate = useNavigate();
-
-  const toastErrorOptions = {
-    position: "top-left",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-    progress: undefined,
-  };
 
   useEffect(() => {
     if (hasToken) {

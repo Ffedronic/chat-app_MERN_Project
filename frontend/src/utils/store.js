@@ -6,8 +6,8 @@ const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVT
 
 const initialState = {
     isConnected: false,
-    hasUsername: "",
-    hasToken: ""
+    userName: "",
+    avatarIs: ""
 }
 
 export const SetConnection = (data) => ({
@@ -19,6 +19,11 @@ export const SetDisconnection = () => ({
     type: "SetDisconnection"
 });
 
+export const SetProfilPicture = (data) => ({
+    type: "SetProfilPicture",
+    payload: data
+});
+
 function reducer(state = initialState, action) {
     
     if(action.type === "SetConnection") {
@@ -26,16 +31,20 @@ function reducer(state = initialState, action) {
         localStorage.setItem("chat-app-userToken", data.token);
         return produce(state, (draft) => {
             draft.isConnected = true;
-            draft.hasToken = data.token;
-            draft.hasUsername = data.username;
+            draft.userName = data.username;
         })
     }
     if(action.type === "SetDisconnection") {
         localStorage.clear();
         return produce(state, (draft) => {
             draft.isConnected = false;
-            draft.hasToken = "";
-            draft.hasUsername = "";
+            draft.avatarIs = "";
+            draft.userName = "";
+        })
+    }
+    if(action.type === "SetProfilPicture") {
+        return produce(state, (draft) => {
+            draft.avatarIs = action.payload;
         })
     }
   

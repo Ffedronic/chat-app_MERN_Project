@@ -11,6 +11,7 @@ import { loginRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
 import { useDispatch } from "react-redux";
 import { SetConnection } from "../utils/store";
+import { toastErrorOptions } from "../utils/toastOptions"
 
 function Login() {
 
@@ -20,18 +21,7 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const toastErrorOptions = {
-    position: "top-left",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-    progress: undefined,
-  };
-
-  const toastSuccessOptions = { ...toastErrorOptions, autoClose: 2000 };
+  const toastSuccessOptions = { ...toastErrorOptions, autoClose: 1000 };
 
   useEffect(() => {
     if(hasToken) {
@@ -59,7 +49,7 @@ function Login() {
           );
           setTimeout(() => {
             navigate("/chat");
-          }, 3000);
+          }, 2000);
         })
         .catch((error) => {
           console.log(error.response);
