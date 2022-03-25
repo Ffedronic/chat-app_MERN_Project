@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import Container from 'react-bootstrap/esm/Container';
+import './Chat.css'
 
 function Chat() {
   return (
-    <div>Chat</div>
+    <Container fluid className='bg-success bg-opacity-10 bg-gradient chat'>
+    </Container>
   )
 }
 

@@ -13,6 +13,7 @@ import { Buffer } from "buffer";
 import { SetProfilPicture } from "../utils/store";
 
 function SetAvatar() {
+
   const api = "https://api.multiavatar.com";
 
   const navigate = useNavigate();
@@ -33,13 +34,16 @@ function SetAvatar() {
     }
     axios.defaults.headers['Authorization'] =`Bearer ${tokenIs}`;
     axios.post(`${setAvatarRoute}/${userId}`, {image: Avatars[selectedAvatar]}).then((response) => {
+      console.log(response)
       const isSet = response.data.isSet ; 
       if(!isSet) {
         toast.error(`${response.data.message}`, toastErrorOptions)
       }
       toast.success(`${response.data.message}`, toastSuccessOptions)
       dispatch(SetProfilPicture(Avatars[selectedAvatar]))
-      navigate("/chat")
+      setTimeout(() => {
+        navigate("/chat")
+      }, 2000);
     }).catch((error) => {
       console.log(error)
     })
@@ -47,34 +51,40 @@ function SetAvatar() {
 
   useEffect(() => {
     const data = [];
-    async function dataAvatars() {
-      for (let i = 0; i < 4; i++) {
-        const response = await axios.get(
-          `${api}/78955/${Math.floor(Math.random() * 10000)}`
-        );
-        const buffer = new Buffer(response.data).toString("base64");
-        data.push(buffer);
+    const avatarImage = localStorage.getItem(`chat-app-userAvatar/${userId}`);
+    if(avatarImage){
+      dispatch(SetProfilPicture(avatarImage));
+      navigate("/chat");
+    } else {
+      async function dataAvatars() {
+        for (let i = 0; i < 4; i++) {
+          const response = await axios.get(
+            `${api}/78955/${Math.floor(Math.random() * 10000)}`
+          );
+          const buffer = new Buffer(response.data).toString("base64");
+          data.push(buffer);
+        }
+        setAvatars(data);
+        setIsLoading(false);
       }
-      setAvatars(data);
-      setIsLoading(false);
+      dataAvatars();
     }
-    dataAvatars();
-  }, []);
+  }, [userId, navigate, dispatch]);
 
   return (
     <div>
       {isLoading ? (
-        <Container>
+        <Container className="text-center mw-100 mh-100 mt-lg-5">
           <div className="mh-100 mw-100 d-flex flex-column justify-content-center align-items-center">
             <img src={Spinner} alt="spinner" />
           </div>
         </Container>
       ) : (
-        <Container className="text-center">
+        <Container className="text-center mw-100 mh-100 mt-lg-5">
           <h1 className="fw-bold text-capitalize mt-5 mb-5">
             Select your avatar
           </h1>
-          <ul className="list-unstyled border border-1 mb-5">
+          <ul className="mw-100 mh-100 list-unstyled border border-1 mb-5 d-md-flex justify-content-md-between justify-content-center">
             {Avatars.map((avatar, index) => {
               return (
                 <li

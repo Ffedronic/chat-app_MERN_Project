@@ -40,6 +40,7 @@ function reducer(state = initialState, action) {
         localStorage.clear();
         return produce(state, (draft) => {
             draft.isConnected = false;
+            draft.userId = "";
             draft.avatarIs = "";
             draft.userName = "";
         })
@@ -47,9 +48,9 @@ function reducer(state = initialState, action) {
     if(action.type === "SetProfilPicture") {
         return produce(state, (draft) => {
             draft.avatarIs = action.payload;
+            localStorage.setItem(`chat-app-userAvatar/${state.userId}`, action.payload)
         })
     }
-  
     return state;
 }
 
