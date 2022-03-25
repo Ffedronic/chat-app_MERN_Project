@@ -6,6 +6,7 @@ const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVT
 
 const initialState = {
     isConnected: false,
+    userId: "",
     userName: "",
     avatarIs: ""
 }
@@ -28,9 +29,10 @@ function reducer(state = initialState, action) {
     
     if(action.type === "SetConnection") {
         const data = action.payload;
-        localStorage.setItem("chat-app-userToken", data.token);
+        localStorage.setItem(`chat-app-userToken/${data.userId}`, data.token);
         return produce(state, (draft) => {
             draft.isConnected = true;
+            draft.userId = data.userId;
             draft.userName = data.username;
         })
     }

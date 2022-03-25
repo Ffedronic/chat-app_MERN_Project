@@ -11,7 +11,7 @@ import { loginRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
 import { useDispatch } from "react-redux";
 import { SetConnection } from "../utils/store";
-import { toastErrorOptions } from "../utils/toastOptions"
+import { toastErrorOptions, toastSuccessOptions } from "../utils/toastOptions"
 
 function Login() {
 
@@ -20,8 +20,6 @@ function Login() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const toastSuccessOptions = { ...toastErrorOptions, autoClose: 1000 };
 
   useEffect(() => {
     if(hasToken) {
@@ -42,6 +40,7 @@ function Login() {
       axios
         .post(loginRoute, { email: email, password: password })
         .then((response) => {
+          console.log(response)
           dispatch(SetConnection(response.data));
           toast.success(
             `${response.data.message}, ${response.data.username}`,

@@ -32,7 +32,9 @@ exports.login = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        res.status(400).json({ message: "non-existent user" });
+        res
+          .status(400)
+          .json({ message: "The user does not exist in the database" });
       }
       bcrypt
         .compare(password, user.password)
@@ -43,10 +45,11 @@ exports.login = (req, res, next) => {
           res.status(200).json({
             message: "Successfull connection",
             username: user.username,
+            userId: user._id,
             token: jwt.sign(
-              { 
+              {
                 userId: user._id,
-                username: user.username
+                username: user.username,
               },
               process.env.SECRET_KEY,
               { expiresIn: "24h" }
@@ -56,4 +59,30 @@ exports.login = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
+};
+
+exports.setAvatar = (req, res, next) => {
+  const userId = res.locals.userId;
+  const { image } = req.body;
+  User.findOne({ userId })
+    .then((user) => {
+      if (!user) {
+        res
+          .status(400)
+          .json({ message: "The user does not exist in the database" });
+      }
+      User.updateOne(
+        { _id: userId },
+        {
+          isAvatarImageSet: true,
+          avatarImage: image,
+        }
+      ).then(() => {
+        console.log(user)
+        res.status(200).json({isSet: true , message: "Your profile picture is saved."})
+      }).catch(() => {
+        res.status(400).json({ error: error, isSet: false, message: "Try again, your profile picture has not been saved." })
+      });
+    })
+    .catch(( error ) => res.status(500).json({ error }));
 };

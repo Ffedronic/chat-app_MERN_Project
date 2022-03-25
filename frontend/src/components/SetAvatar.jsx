@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import axios from "axios";
@@ -7,36 +8,55 @@ import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/ApiRoutes";
-import { toastErrorOptions } from "../utils/toastOptions";
+import { toastErrorOptions, toastSuccessOptions } from "../utils/toastOptions";
 import { Buffer } from "buffer";
+import { SetProfilPicture } from "../utils/store";
 
 function SetAvatar() {
   const api = "https://api.multiavatar.com";
 
   const navigate = useNavigate();
+  
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.userId);
+
+  const tokenIs = localStorage.getItem(`chat-app-userToken/${userId}`);
 
   const [Avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState([]);
 
-  const SetProfilPicture = async () => {
-      if(selectedAvatar === undefined) {
-          toast.error("Select a Avatar now", toastErrorOptions);
+  const AddAvatarAsProfilPicture = () => {
+    if (selectedAvatar.length === 0) {
+      toast.error("Pick up a avatar.", toastErrorOptions);
+    }
+    axios.defaults.headers['Authorization'] =`Bearer ${tokenIs}`;
+    axios.post(`${setAvatarRoute}/${userId}`, {image: Avatars[selectedAvatar]}).then((response) => {
+      const isSet = response.data.isSet ; 
+      if(!isSet) {
+        toast.error(`${response.data.message}`, toastErrorOptions)
       }
-      
+      toast.success(`${response.data.message}`, toastSuccessOptions)
+      dispatch(SetProfilPicture(Avatars[selectedAvatar]))
+      navigate("/chat")
+    }).catch((error) => {
+      console.log(error)
+    })
   };
 
   useEffect(() => {
     const data = [];
     async function dataAvatars() {
       for (let i = 0; i < 4; i++) {
-        const randomUrlAvatar = await `${api}/${Math.floor(
-          Math.random() * 100000
-        )}.png`;
-        data.push(randomUrlAvatar);
+        const response = await axios.get(
+          `${api}/78955/${Math.floor(Math.random() * 10000)}`
+        );
+        const buffer = new Buffer(response.data).toString("base64");
+        data.push(buffer);
       }
-      await setAvatars(data);
-      await setIsLoading(false);
+      setAvatars(data);
+      setIsLoading(false);
     }
     dataAvatars();
   }, []);
@@ -45,11 +65,15 @@ function SetAvatar() {
     <div>
       {isLoading ? (
         <Container>
-          <img src={Spinner} alt="spinner" />
+          <div className="mh-100 mw-100 d-flex flex-column justify-content-center align-items-center">
+            <img src={Spinner} alt="spinner" />
+          </div>
         </Container>
       ) : (
         <Container className="text-center">
-          <h1 className="fw-bold text-capitalize mt-5 mb-5">Select your avatar</h1>
+          <h1 className="fw-bold text-capitalize mt-5 mb-5">
+            Select your avatar
+          </h1>
           <ul className="list-unstyled border border-1 mb-5">
             {Avatars.map((avatar, index) => {
               return (
@@ -60,8 +84,12 @@ function SetAvatar() {
                   }`}
                 >
                   <img
-                    className={`w-50 ${selectedAvatar === index ? "border border-5 border-primary p-1 rounded-circle" : ""}`}
-                    src={avatar}
+                    className={`w-50 ${
+                      selectedAvatar === index
+                        ? "border border-5 border-primary p-1 rounded-circle"
+                        : ""
+                    }`}
+                    src={`data:image/svg+xml;base64,${avatar}`}
                     alt={`${index}-avatar`}
                     onClick={() => {
                       setSelectedAvatar(index);
@@ -71,9 +99,15 @@ function SetAvatar() {
               );
             })}
           </ul>
-          <button className="btn btn-primary fw-bold mb-5">Submit Avatar</button>
+          <Button
+            onClick={AddAvatarAsProfilPicture}
+            className="btn btn-primary fw-bold mb-5"
+          >
+            Submit Avatar
+          </Button>
         </Container>
       )}
+      <ToastContainer />
     </div>
   );
 }
