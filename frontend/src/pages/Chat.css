@@ -1,4 +1,9 @@
-.chat {
+.container-app {
     height: 100vh;
     width: 100vw;
+}
+
+.message-container {
+    height: 95%;
+    width: 95%;
 }

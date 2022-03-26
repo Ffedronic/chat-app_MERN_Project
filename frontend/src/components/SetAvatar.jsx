@@ -50,6 +50,14 @@ function SetAvatar() {
   };
 
   useEffect(() => {
+    const isLogged = localStorage.getItem(`chat-app-userToken/${userId}`);
+    if(!isLogged) {
+      navigate("/login")
+    }
+  }, [userId, navigate])
+  
+  
+  useEffect(() => {
     const data = [];
     const avatarImage = localStorage.getItem(`chat-app-userAvatar/${userId}`);
     if(avatarImage){

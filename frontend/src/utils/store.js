@@ -30,10 +30,12 @@ function reducer(state = initialState, action) {
     if(action.type === "SetConnection") {
         const data = action.payload;
         localStorage.setItem(`chat-app-userToken/${data.userId}`, data.token);
+        localStorage.setItem(`chat-app-userAvatar/${data.userId}`, data.avatarImage)
         return produce(state, (draft) => {
             draft.isConnected = true;
             draft.userId = data.userId;
             draft.userName = data.username;
+            draft.avatarIs = data.avatarImage;
         })
     }
     if(action.type === "SetDisconnection") {

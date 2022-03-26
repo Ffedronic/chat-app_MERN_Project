@@ -9,4 +9,6 @@ router.post("/login", userController.login);
 
 router.post("/setAvatar/:id", auth, userController.setAvatar);
 
+router.get("/users/:id", userController.getAllUsers)
+
 module.exports = router ;   

@@ -9,13 +9,15 @@ import Button from "react-bootstrap/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SetConnection } from "../utils/store";
 import { toastErrorOptions, toastSuccessOptions } from "../utils/toastOptions"
 
 function Login() {
 
-  const hasToken = localStorage.getItem("chat-app-userToken");
+  const userId = useSelector((state) => state.userId);
+  
+  const hasToken = localStorage.getItem(`chat-app-userToken/${userId}`);
 
   const dispatch = useDispatch();
 

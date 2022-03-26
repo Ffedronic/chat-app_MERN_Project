@@ -46,6 +46,7 @@ exports.login = (req, res, next) => {
             message: "Successfull connection",
             username: user.username,
             userId: user._id,
+            avatarImage: user.avatarImage,
             token: jwt.sign(
               {
                 userId: user._id,
@@ -77,12 +78,28 @@ exports.setAvatar = (req, res, next) => {
           isAvatarImageSet: true,
           avatarImage: image,
         }
-      ).then(() => {
-        console.log(user)
-        res.status(200).json({isSet: true , message: "Your profile picture is saved."})
-      }).catch(() => {
-        res.status(400).json({ error: error, isSet: false, message: "Try again, your profile picture has not been saved." })
-      });
+      )
+        .then(() => {
+          res
+            .status(200)
+            .json({ isSet: true, message: "Your profile picture is saved." });
+        })
+        .catch(() => {
+          res.status(400).json({
+            error: error,
+            isSet: false,
+            message: "Try again, your profile picture has not been saved.",
+          });
+        });
     })
-    .catch(( error ) => res.status(500).json({ error }));
+    .catch((error) => res.status(500).json({ error }));
+};
+
+exports.getAllUsers = async (req, res, next) => {
+ try{
+  const users = await User.find({_id: { $ne: req.params.id }}).select(["email", "username", "avatarImage"]);
+  return res.status(200).json({ users })
+ } catch {
+  res.status(500).json({message: "error with the server, please try again."})
+ }
 };
