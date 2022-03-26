@@ -9,6 +9,7 @@ import axios from "axios";
 import { getAllUsersRoute } from "../utils/ApiRoutes";
 import Contacts from "../components/Contacts/Contacts";
 import CurrentUser from "../components/CurrentUser";
+import Welcome from "../components/Welcome";
 
 function Chat() {
 
@@ -42,16 +43,16 @@ function Chat() {
       fluid
       className=" overflow-auto bg-primary bg-opacity-10 bg-gradient container-app d-flex flex-column justify-content-center align-items-center"
     >
-      <Row className="message-container bg-body">
-        <Col xs={12} md={3} className="d-md-flex flex-md-column justify-content-between">
+      <Row className="message-container bg-body overflow-auto p-2">
+        <Col xs={12} md={3} className="listOfContacts d-md-flex flex-md-column justify-content-between">
           <CurrentUser/>
           <Contacts contacts={contacts} />
-          <div className="fs-2 p-2 text-center shadow">
+          <div className="fs-2 p-2 mb-2 text-center shadow">
             Welcome to Connect Us !
           </div>
         </Col>
-        <Col xs={12} md={9}>
-
+        <Col className="bg-primary bg-opacity-10 my-1 overflow-auto" xs={12} md={9}>
+          <Welcome />
         </Col>
       </Row>
     </Container>
