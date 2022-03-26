@@ -8,7 +8,8 @@ const initialState = {
     isConnected: false,
     userId: "",
     userName: "",
-    avatarIs: ""
+    avatarIs: "",
+    SelectedContact: "",
 }
 
 export const SetConnection = (data) => ({
@@ -23,6 +24,11 @@ export const SetDisconnection = () => ({
 export const SetProfilPicture = (data) => ({
     type: "SetProfilPicture",
     payload: data
+});
+
+export const SetSelectedContact = (contact) => ({
+    type: "SetSelectedContact",
+    payload: contact
 });
 
 function reducer(state = initialState, action) {
@@ -45,12 +51,18 @@ function reducer(state = initialState, action) {
             draft.userId = "";
             draft.avatarIs = "";
             draft.userName = "";
+            draft.SelectedContact = "";
         })
     }
     if(action.type === "SetProfilPicture") {
         return produce(state, (draft) => {
             draft.avatarIs = action.payload;
             localStorage.setItem(`chat-app-userAvatar/${state.userId}`, action.payload)
+        })
+    }
+    if(action.type === "SetSelectedContact") {
+        return produce(state, (draft) => {
+            draft.SelectedContact = action.payload;
         })
     }
     return state;

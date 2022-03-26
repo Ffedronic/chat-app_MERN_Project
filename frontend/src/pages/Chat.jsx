@@ -10,10 +10,13 @@ import { getAllUsersRoute } from "../utils/ApiRoutes";
 import Contacts from "../components/Contacts/Contacts";
 import CurrentUser from "../components/CurrentUser";
 import Welcome from "../components/Welcome";
+import ChatContainer from "../components/ChatContainer";
 
 function Chat() {
 
   const userId = useSelector((state) => state.userId);
+
+  const selectedContact = useSelector((state) => state.SelectedContact);
 
   const [contacts, SetContacts] = useState([]);
 
@@ -52,7 +55,7 @@ function Chat() {
           </div>
         </Col>
         <Col className="bg-primary bg-opacity-10 my-1 overflow-auto" xs={12} md={9}>
-          <Welcome />
+          {selectedContact?(<ChatContainer/>):(<Welcome />)}
         </Col>
       </Row>
     </Container>
