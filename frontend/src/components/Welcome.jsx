@@ -2,7 +2,12 @@ import React from "react";
 import Robot from "../assets/robot.gif";
 import { useSelector } from "react-redux";
 
+/**
+ * It renders the welcome message.
+ * @returns The `Welcome` component is returning a div with a robot image and a welcome message.
+ */
 function Welcome() {
+  
   const currentUserUsername = useSelector((state) => state.userName);
 
   return (

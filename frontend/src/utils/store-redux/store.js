@@ -1,16 +1,10 @@
 import { createStore } from "redux";
 
+import { initialState} from "./initialState"
+
 import produce from "immer";
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-
-const initialState = {
-    isConnected: false,
-    userId: "",
-    userName: "",
-    avatarIs: "",
-    SelectedContact: "",
-}
 
 export const SetConnection = (data) => ({
     type: "SetConnection",

@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SetDisconnection } from "../utils/store";
+import { SetDisconnection } from "../utils/store-redux/store";
 
 function Banner() {
 

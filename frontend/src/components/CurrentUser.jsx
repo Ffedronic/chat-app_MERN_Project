@@ -2,6 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 
+/**
+ * This function returns a div with an image and a username
+ * @returns The current user avatar image and username.
+ */
 function CurrentUser() {
   const currentUserAvatarImage = useSelector((state) => state.avatarIs);
   const currentUserUsername = useSelector((state) => state.userName);

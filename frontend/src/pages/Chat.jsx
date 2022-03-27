@@ -13,7 +13,6 @@ import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 
 function Chat() {
-
   const userId = useSelector((state) => state.userId);
 
   const selectedContact = useSelector((state) => state.SelectedContact);
@@ -22,6 +21,8 @@ function Chat() {
 
   const navigate = useNavigate();
 
+  
+  /* This is a React Hook that is used to fetch the list of contacts from the mongoDB database. */
   useEffect(() => {
     if (!userId) {
       navigate("/login");
@@ -33,6 +34,7 @@ function Chat() {
     }
   }, [navigate, userId]);
 
+  /* This is a React Hook that is used to fetch the user avatar image from the local storage. */
   useEffect(() => {
     const avatarImage = localStorage.getItem(`chat-app-userAvatar/${userId}`);
     if (!avatarImage) {
@@ -40,22 +42,29 @@ function Chat() {
     }
   }, [userId, navigate]);
 
-  
   return (
     <Container
       fluid
       className=" overflow-auto bg-primary bg-opacity-10 bg-gradient container-app d-flex flex-column justify-content-center align-items-center"
     >
       <Row className="message-container bg-body overflow-auto p-2">
-        <Col xs={12} md={3} className="listOfContacts d-md-flex flex-md-column justify-content-between">
-          <CurrentUser/>
+        <Col
+          xs={12}
+          md={3}
+          className="listOfContacts d-md-flex flex-md-column justify-content-between"
+        >
+          <CurrentUser />
           <Contacts contacts={contacts} />
           <div className="fs-2 p-2 mb-2 text-center shadow">
             Welcome to Connect Us !
           </div>
         </Col>
-        <Col className="bg-primary bg-opacity-10 my-1 overflow-auto" xs={12} md={9}>
-          {selectedContact?(<ChatContainer/>):(<Welcome />)}
+        <Col
+          className="bg-primary bg-opacity-10 my-1 overflow-auto"
+          xs={12}
+          md={9}
+        >
+          {selectedContact ? <ChatContainer /> : <Welcome />}
         </Col>
       </Row>
     </Container>

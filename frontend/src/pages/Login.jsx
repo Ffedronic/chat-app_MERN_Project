@@ -10,9 +10,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/ApiRoutes";
 import { strongPassword } from "../utils/strongPassword";
 import { useDispatch, useSelector } from "react-redux";
-import { SetConnection } from "../utils/store";
+import { SetConnection } from "../utils/store-redux/store";
 import { toastErrorOptions, toastSuccessOptions } from "../utils/toastOptions"
 
+
+/**
+ * It takes an event as an argument, and then sets the values object to a new object that is identical
+ * to the values object, except the property of the name of the element that triggered the event is set
+ * to the value of that element
+ */
 function Login() {
 
   const userId = useSelector((state) => state.userId);
@@ -23,6 +29,7 @@ function Login() {
 
   const navigate = useNavigate();
 
+  /* This is a React Hook that is used to navigate to the chat page if the user has a token. */
   useEffect(() => {
     if(hasToken) {
       navigate("/chat")
@@ -35,6 +42,9 @@ function Login() {
     password: "",
   });
 
+  /**
+   * It sends a POST request to the server to log in a user.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
     if (handleValidation()) {
@@ -58,6 +68,10 @@ function Login() {
     }
   };
 
+  /**
+   * It validates the password.
+   * @returns The `handleValidation` function returns a boolean value.
+   */
   const handleValidation = () => {
     const { password } = values;
     if (!strongPassword.test(password)) {
@@ -69,6 +83,12 @@ function Login() {
     }
     return true;
   };
+
+  /**
+   * The function takes an event as an argument, and then sets the values object to a new object that
+   * is identical to the values object, except the property of the name of the element that triggered
+   * the event is set to the value of that element
+   */
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
@@ -121,5 +141,6 @@ function Login() {
       <ToastContainer />
     </div>
   );
-  }
+}
+
 export default Login;

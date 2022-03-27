@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Contacts.css";
 import {useDispatch, useSelector } from "react-redux";
-import { SetSelectedContact } from "../../utils/store";
+import { SetSelectedContact } from "../../utils/store-redux/store";
 
 
 function Contacts({ contacts }) {

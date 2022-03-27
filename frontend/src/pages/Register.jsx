@@ -33,6 +33,9 @@ function Register() {
     confirmPassword: "",
   });
 
+  /**
+   * It sends a POST request to the server to register a new user.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
     if (handleValidation()) {
@@ -57,6 +60,11 @@ function Register() {
     }
   };
 
+  /**
+   * It validates the form.
+   * @returns The return value is a boolean value. If the validation is successful, it returns true.
+   * Otherwise, it returns false.
+   */
   const handleValidation = () => {
     const { password, confirmPassword, username } = values;
     if (password !== confirmPassword) {
@@ -80,6 +88,12 @@ function Register() {
     }
     return true;
   };
+
+  /**
+   * The function takes an event as an argument, and then sets the values object to a new object that
+   * is identical to the values object, except the property of the name of the element that triggered
+   * the event is set to the value of that element
+   */
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };

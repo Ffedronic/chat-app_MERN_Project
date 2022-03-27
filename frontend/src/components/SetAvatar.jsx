@@ -10,8 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/ApiRoutes";
 import { toastErrorOptions, toastSuccessOptions } from "../utils/toastOptions";
 import { Buffer } from "buffer";
-import { SetProfilPicture } from "../utils/store";
+import { SetProfilPicture } from "../utils/store-redux/store";
 
+/**
+ * Used to set the avatar of the user
+ * @returns The return is a function that will render the avatar selection page.
+ */
 function SetAvatar() {
 
   const api = "https://api.multiavatar.com";
@@ -28,6 +32,9 @@ function SetAvatar() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState([]);
 
+  /**
+   * It sets the avatar of the user.
+   */
   const AddAvatarAsProfilPicture = () => {
     if (selectedAvatar.length === 0) {
       toast.error("Pick up a avatar.", toastErrorOptions);
@@ -49,6 +56,8 @@ function SetAvatar() {
     })
   };
 
+  /* This is a React Hooks. It is used to check if the user is logged in. If not, it will redirect to
+  the login page. */
   useEffect(() => {
     const isLogged = localStorage.getItem(`chat-app-userToken/${userId}`);
     if(!isLogged) {
@@ -57,6 +66,7 @@ function SetAvatar() {
   }, [userId, navigate])
   
   
+  /* Used to get the avatars of the user. */
   useEffect(() => {
     const data = [];
     const avatarImage = localStorage.getItem(`chat-app-userAvatar/${userId}`);
