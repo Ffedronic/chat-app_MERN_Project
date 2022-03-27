@@ -47,7 +47,7 @@ function Chat() {
       fluid
       className=" overflow-auto bg-primary bg-opacity-10 bg-gradient container-app d-flex flex-column justify-content-center align-items-center"
     >
-      <Row className="message-container bg-body overflow-auto p-2">
+      <Row className="message-container bg-body overflow-auto p-2 rounded rounded-3">
         <Col
           xs={12}
           md={3}
@@ -60,7 +60,7 @@ function Chat() {
           </div>
         </Col>
         <Col
-          className="bg-primary bg-opacity-10 my-1 overflow-auto"
+          className="bg-primary bg-opacity-10 my-1 overflow-auto rounded-3"
           xs={12}
           md={9}
         >

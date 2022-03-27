@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 
 /**
- * This function returns a div with an image and a username
+ * This function returns a article with an image and a username
  * @returns The current user avatar image and username.
  */
 function CurrentUser() {
