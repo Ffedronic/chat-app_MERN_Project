@@ -43,14 +43,16 @@ function Chat() {
   }, [userId, navigate]);
 
   return (
-    <Container
+    <div className="container-app">
+      <Container
       fluid
-      className=" overflow-auto bg-primary bg-opacity-10 bg-gradient container-app d-flex flex-column justify-content-center align-items-center"
+      className="h-100 border border-3 bg-primary bg-opacity-10 bg-gradient d-flex flex-column justify-content-center align-items-center"
     >
-      <Row className="message-container bg-body overflow-auto p-2 rounded rounded-3">
+      <Row className="w-100 h-100 overflow-auto bg-body p-2 rounded rounded-3">
         <Col
           xs={12}
-          md={3}
+          md={5}
+          lg={3}
           className="listOfContacts d-md-flex flex-md-column justify-content-between"
         >
           <CurrentUser />
@@ -62,12 +64,14 @@ function Chat() {
         <Col
           className="bg-primary bg-opacity-10 my-1 overflow-auto rounded-3"
           xs={12}
-          md={9}
+          md={7}
+          lg={9}
         >
           {selectedContact ? <ChatContainer /> : <Welcome />}
         </Col>
       </Row>
     </Container>
+    </div>
   );
 }
 

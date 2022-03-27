@@ -6,6 +6,6 @@ const router = require("express").Router();
 
 router.post("/addMessage/:id", auth, messagesController.addMessage);
 
-router.post("/getAllMessages", messagesController.getAllMessages);
+router.post("/getAllMessages/:id", auth, messagesController.getAllMessages);
 
 module.exports = router ;   

@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import ChatHeader from "./ChatHeader";
-import { addMessagesRoute } from "../utils/ApiRoutes";
+import { addMessagesRoute, getAllMessagesRoute } from "../utils/ApiRoutes";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { toastErrorOptions } from "../utils/toastOptions"
-import { ToastContainer, toast } from "react-toastify";
-
-
+import ChatMessages from "./ChatMessages";
+import "./chatContainer.css"
 
 /**
  * This function renders the chat container
@@ -36,15 +34,26 @@ function ChatContainer() {
         to: selectedContactUserId,
       })
       .then((response) => console.log(response.data.message))
-      .catch((error) => toast.error(error.response.data.error._message, toastErrorOptions));
+      .catch((error) => console.log(error.response.data.error._message));
   };
 
-  
+  useEffect(() => {
+    axios.defaults.headers["Authorization"] = `Bearer ${tokenIs}`;
+    axios
+      .post(`${getAllMessagesRoute}/${userId}`, {
+        from: userId,
+        to: selectedContactUserId,
+      })
+      .then((response) => {
+        setMessages(response.data)
+      })
+      .catch((error) => console.log(error));
+  }, [tokenIs, userId, selectedContactUserId]);
 
   return (
-    <section className="p-2 d-flex flex-column justify-content-between w-100 h-100">
+    <section className="chatContainer-grid p-2 w-100 h-100">
       <ChatHeader />
-      <article id="chatContainer-messages">Messages</article>
+      <ChatMessages messages={ messages } />
       <ChatInput handleSendMessage={handleSendMessage} />
     </section>
   );
