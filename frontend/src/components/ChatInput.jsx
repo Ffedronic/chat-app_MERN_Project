@@ -48,7 +48,7 @@ function ChatInput({ handleSendMessage }) {
   };
 
   return (
-    <article className="d-flex flex-column align-items-end flex-md-row align-items-md-end">
+    <article className=" position-relative d-flex flex-column align-items-end flex-md-row align-items-md-end">
       <div
         data-bs-toggle="tooltip"
         data-bs-placement="top"

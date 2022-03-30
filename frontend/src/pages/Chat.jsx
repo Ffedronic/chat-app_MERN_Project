@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
@@ -6,13 +6,17 @@ import Col from "react-bootstrap/Col";
 import { useSelector } from "react-redux";
 import "./Chat.css";
 import axios from "axios";
-import { getAllUsersRoute } from "../utils/ApiRoutes";
+import { getAllUsersRoute, host } from "../utils/ApiRoutes";
 import Contacts from "../components/Contacts/Contacts";
 import CurrentUser from "../components/CurrentUser";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
+import { io } from "socket.io-client"
 
 function Chat() {
+
+  const socket = useRef();
+
   const userId = useSelector((state) => state.userId);
 
   const selectedContact = useSelector((state) => state.SelectedContact);
@@ -21,6 +25,12 @@ function Chat() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if(userId) {
+      socket.current = io(host);
+      socket.current.emit("add-user", userId);
+    }
+  }, [userId])
   
   /* This is a React Hook that is used to fetch the list of contacts from the mongoDB database. */
   useEffect(() => {
@@ -67,7 +77,7 @@ function Chat() {
           md={7}
           lg={9}
         >
-          {selectedContact ? <ChatContainer /> : <Welcome />}
+          {selectedContact ? <ChatContainer socket={socket} /> : <Welcome />}
         </Col>
       </Row>
     </Container>
