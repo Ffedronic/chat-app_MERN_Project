@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 import "./Contacts.css";
-import {useDispatch, useSelector } from "react-redux";
+import {useDispatch } from "react-redux";
 import { SetSelectedContact } from "../../utils/store-redux/store";
 
 
+/**
+ * It renders a list of contacts
+ * @returns The Contacts component is returning a list of contacts. Each contact is a list item with an
+ * avatar and username. The avatar is being pulled from the contact's avatarImage property. The
+ * username is being pulled from the contact's username property.
+ */
 function Contacts({ contacts }) {
 
   const dispatch = useDispatch();
  
   const [selectedContact, setSelectedContact] = useState("");
  
+ /**
+  * It sets the selected contact to the index passed in and then dispatches the SetSelectedContact
+  * action.
+  */
   const SetContact = (index) => {
     setSelectedContact(index);
     dispatch(SetSelectedContact(contacts[index]));

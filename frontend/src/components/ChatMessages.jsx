@@ -1,5 +1,9 @@
 import React, { useRef } from "react";
 
+/**
+ * This function renders a list of messages.
+ * @returns The ChatMessages component is returning a list of messages. Each message is a list item.
+ */
 function ChatMessages({ messages }) {
   const scrollRef = useRef();
 

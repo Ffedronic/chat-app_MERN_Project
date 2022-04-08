@@ -63,6 +63,7 @@ function ChatContainer({socket}) {
       .catch((error) => console.log(error));
   }, [tokenIs, userId, selectedContactUserId]);
 
+  /* This is a React Hook that is used to fetch data from the server. */
   useEffect(() => {
     if(socket.current) {
       socket.current.on("message-recieved", (messageRecieved) => {
@@ -71,10 +72,12 @@ function ChatContainer({socket}) {
     }
   }, [socket])
 
+  /* This is a React Hook that is used to fetch data from the server. */
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage])
 
+  /* This is a React Hook that is used to fetch data from the server. */
   useEffect(() => {
     scrollRef.current?.scrollIntoView({behavior: "smooth"})
   }, [messages])

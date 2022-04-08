@@ -13,6 +13,10 @@ import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 import { io } from "socket.io-client"
 
+/* The `Chat` component is the main component of the application. It is responsible for rendering the
+`Container` component that contains the `Row` component that contains the `Col` components. The
+`Col` components are responsible for rendering the `CurrentUser`, `Contacts` and `ChatContainer`
+components. */
 function Chat() {
 
   const socket = useRef();
@@ -25,6 +29,7 @@ function Chat() {
 
   const navigate = useNavigate();
 
+  /* This is a React Hook that is used to connect the socket.io server with the client. */
   useEffect(() => {
     if(userId) {
       socket.current = io(host);

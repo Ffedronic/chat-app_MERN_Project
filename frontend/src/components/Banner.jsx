@@ -6,6 +6,16 @@ import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SetDisconnection } from "../utils/store-redux/store";
 
+/**
+ * The banner is the top of the page. It contains the logo and the navigation bar. 
+ * 
+ * The navigation bar contains the login and register buttons. 
+ * 
+ * The banner is the top of the page. It contains the logo and the navigation bar. 
+ * 
+ * The navigation bar contains the login and register buttons.
+ * @returns The Navbar component is being returned.
+ */
 function Banner() {
 
   const dispatch = useDispatch();
